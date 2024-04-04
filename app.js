@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var express = require("express");
 const mustacheExpress = require("mustache-express");
 var path = require("path");
@@ -12,13 +14,15 @@ var app = express();
 app.engine("mustache", mustacheExpress());
 app.set("view engine", "mustache");
 app.set("views", __dirname + "/views");
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(__dirname + "/node_modules/bootstrap/dist"));
+
+
+app.use(express.json());
 
 app.use((req, res, next) => {
   const originalRender = res.render;
@@ -37,6 +41,7 @@ app.use((req, res, next) => {
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+
 
 app.listen(3000, function () {
   console.log("Server is running on port 3000");
