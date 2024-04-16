@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const { createUser } = require('../queries/users');
+const { login } = require('../queries/users');
+const sanitize = require("sanitize-html");
 
 /* GET home page. */
 router.get("/", function (req, res) {
@@ -16,5 +18,11 @@ router.get("/register", function (req, res, next) {
 });
 
 router.post("/register", createUser);
+
+router.get("/login", function (req, res, next) {
+  res.render("login", { title: "Login", layout: "layout" }); // Make sure 'layout' is the correct name of your layout file without the extension
+});
+
+router.post("/login", login);
 
 module.exports = router;

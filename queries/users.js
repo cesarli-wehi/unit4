@@ -27,6 +27,17 @@ const createUser = async (req, res) => {
  */
 const login = async (req, res) => {
     const { email, password } = req.body;
+
+  //sanitize the email and password to avoid XSS attacks
+  email = sanitize(email);
+  password = sanitize(password);
+
+  //validate the email
+  if (!validator.isEmail(email)) {
+    return res.status(400).send("Invalid email");
+  }
+
+  next();
     try {
         const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
         if (await bcrypt.compare(password, user.rows[0].password)) {
@@ -41,5 +52,6 @@ const login = async (req, res) => {
 }
 
 module.exports = {
-    createUser
+    createUser,
+    login
 };
